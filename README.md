@@ -1,16 +1,11 @@
----
-title: '<span style = "font-size: 175%;"> `PopAging DataViz` <br> Visualizing Population Data in `R` </span>'
-subtitle: "[A THREE-DAY WORKSHOP AT FLORIDA STATE UNIVERSITY]{style='color: #9c9c9c'}"
-format:
-  html
-editor: source
----
+# `PopAging DataViz` 
 
+### A Three-Day Workshop at Florida State University 
 
 ## About the Workshop
 
 
-[**PopAging DataViz**]{style='font-size: 140%; font-family: Arizonia'} is a short course (or workshop) on visualizing population data within `R`'s graphical ecosystem. During the workshop, we will be using the [`ggplot2`](https://ggplot2.tidyverse.org/){.external target="_blank"} library as our workhorse. Over the course of three days, workshop participants will be exposed to many of the principles undergirding the ***Grammar of Graphics*** framework for visualizing data [see @thegram2005] --- a grammar that serves as the lifeblood of `ggplot2` and its many extensions. 
+[**PopAging DataViz**]{style='font-size: 140%; font-family: Arizonia'} is a short course (or workshop) on visualizing population data within `R`'s graphical ecosystem. During the workshop, we will be using the [`ggplot2`](https://ggplot2.tidyverse.org/) library as our workhorse. Over the course of three days, workshop participants will be exposed to many of the principles undergirding the ***Grammar of Graphics*** framework for visualizing data [see @thegram2005] --- a grammar that serves as the lifeblood of `ggplot2` and its many extensions. 
 
 Then, the course will slowly build in complexity. Concretely, participants will be exposed to modules on (1) generating population pyramids and other plots that are germane to population research (e.g., Lexis diagrams); (2) leveraging interactivity and animations to bring data visualizations to life; and (3) visualizing statistical quantities  of substantive interest (e.g., average marginal effects, adjusted predictions) to clarify model results.  
 
@@ -31,11 +26,11 @@ Cédric Scherer's course on [`Graphic Design with ggplot2`](https://rstudio-conf
 
 ### Programming Language
 
-As noted, this short course will be centred around---or anchored to---the `R` programming language for statistical computing and visualization. If you do not have `R` on your machine, please download the open-source software by clicking [here](https://cran.r-project.org/){.external target="_blank"} before following the relevant prompts.
+As noted, this short course will be centred around---or anchored to---the `R` programming language for statistical computing and visualization. If you do not have `R` on your machine, please download the open-source software by clicking [here](https://cran.r-project.org/) before following the relevant prompts.
 
 ### Integrated Development Environment 
 
-Participants are encouraged to run their code using `RStudio`,^[Participants should, of course, feel free to use other IDEs, `R` environments, or source-code editors to run the material featured in this short course.] a powerful open-source IDE optimized for `R`. If you do not have `RStudio` on your machine, you can download the application by clicking [here](https://posit.co/download/rstudio-desktop/){.external target="_blank"}. 
+Participants are encouraged to run their code using `RStudio`,^[Participants should, of course, feel free to use other IDEs, `R` environments, or source-code editors to run the material featured in this short course.] a powerful open-source IDE optimized for `R`. If you do not have `RStudio` on your machine, you can download the application by clicking [here](https://posit.co/download/rstudio-desktop/). 
 
 ### Packages
 
@@ -45,13 +40,13 @@ Thanks to the wonderful `renv` package, simply running `renv::restore()` before 
 
 You'll need to obtain valid API keys to use the `tidycensus` and `cancensus` libraries. 
 
-+ Instructions for obtaining a CensusMapper API key (to access `cancensus` data)---and storing it on your system---can be found [here](https://github.com/mountainMath/cancensus#api-key){.external target="_blank"}.
++ Instructions for obtaining a CensusMapper API key (to access `cancensus` data)---and storing it on your system---can be found [here](https://github.com/mountainMath/cancensus#api-key).
 
-+ Instructions for obtaining an API key from the US Census Bureau---and storing it on your system---can be found [here](https://walker-data.com/tidycensus/articles/basic-usage.html){.external target="_blank"}.
++ Instructions for obtaining an API key from the US Census Bureau---and storing it on your system---can be found [here](https://walker-data.com/tidycensus/articles/basic-usage.html).
 
 ### Fonts
 
 Please download and install the `IBM Plex Sans` and `Inconsolata` typefaces via [Google Fonts](https://fonts.google.com/) or by downloading the compressed file embedded below:
 
-<a href="./misc/fonts.zip"> `fonts.zip`</a> <i class="fa-solid fa-download"></i>
+<a href="https://github.com/sakeefkarim/popagingdataviz_workshop/raw/main/misc/fonts.zip"> `fonts.zip`</a> <i class="fa-solid fa-download"></i>
 
