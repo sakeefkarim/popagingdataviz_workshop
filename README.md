@@ -1,1 +1,1 @@
-# popagingdataviz_workshop
+# PopAging DataViz
