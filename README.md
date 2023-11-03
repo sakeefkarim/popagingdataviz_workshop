@@ -1,6 +1,4 @@
-# `PopAging DataViz` 
-
-### Visualizing Population Data in `R`
+# `PopAging DataViz`: Visualizing Population Data in `R`
 
 ### A Three-Day Workshop at Florida State University [<img src="https://github.com/sakeefkarim/popagingdataviz_workshop/raw/main/misc/logo.png" align="right" width="150">](https://popagingdataviz.com/)
 
