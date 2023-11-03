@@ -1,11 +1,12 @@
 # `PopAging DataViz` 
 
-### A Three-Day Workshop at Florida State University 
+### Visualizing Population Data in `R`
+
+### A Three-Day Workshop at Florida State University [<img src="https://github.com/sakeefkarim/popagingdataviz_workshop/raw/main/misc/logo.png" align="right" width="150">](https://popagingdataviz.com/)
 
 ## About the Workshop
 
-
-[**PopAging DataViz**]{style='font-size: 140%; font-family: Arizonia'} is a short course (or workshop) on visualizing population data within `R`'s graphical ecosystem. During the workshop, we will be using the [`ggplot2`](https://ggplot2.tidyverse.org/) library as our workhorse. Over the course of three days, workshop participants will be exposed to many of the principles undergirding the ***Grammar of Graphics*** framework for visualizing data [see @thegram2005] --- a grammar that serves as the lifeblood of `ggplot2` and its many extensions. 
+**PopAging DataViz** is a short course (or workshop) on visualizing population data within `R`'s graphical ecosystem. During the workshop, we will be using the [`ggplot2`](https://ggplot2.tidyverse.org/) library as our workhorse. Over the course of three days, workshop participants will be exposed to many of the principles undergirding the ***Grammar of Graphics*** framework for visualizing data [see @thegram2005] --- a grammar that serves as the lifeblood of `ggplot2` and its many extensions. 
 
 Then, the course will slowly build in complexity. Concretely, participants will be exposed to modules on (1) generating population pyramids and other plots that are germane to population research (e.g., Lexis diagrams); (2) leveraging interactivity and animations to bring data visualizations to life; and (3) visualizing statistical quantities  of substantive interest (e.g., average marginal effects, adjusted predictions) to clarify model results.  
 
