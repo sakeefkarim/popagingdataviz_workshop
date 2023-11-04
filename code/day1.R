@@ -1,11 +1,13 @@
-## Day 1: Introduction to ggplot2
-## PopAging DataViz
-## Sakeef M. Karim
-## Companion Script File
-## CC-BY-SA 4.0
+# ------------------------------------------------------------------------------
+
+# Day 1: Introduction to ggplot2
+# PopAging DataViz
+# Sakeef M. Karim
+# Companion Script File
+# CC-BY-SA 4.0
 
 
-# PRELIMINARIES -----------------------------------------------------------
+# PRELIMINARIES ----------------------------------------------------------------
 
 library(systemfonts)
 library(tidyverse)
@@ -39,17 +41,17 @@ library(ggridges)
 library(ggtext)
 
 
-# LOADING THE DATA --------------------------------------------------------
+# LOADING THE DATA -------------------------------------------------------------
 
 load("./data/day1.RData")
 
-# PRELIMINARY EXAMPLE -----------------------------------------------------
+# PRELIMINARY EXAMPLE ----------------------------------------------------------
 
 data(penguins)
 
 skim(penguins)
 
-# Three histograms
+# Three histograms -------------------------------------------------------------
 
 # Base R:
 
@@ -72,9 +74,9 @@ ggplot(data = penguins, mapping = aes(x = bill_depth_mm)) +
 # 2. What other questions can we ask (or visually explore) using `penguins`?
   
 
-# THE GRAMMAR OF ggplot2 ---------------------------------------------------
+# THE GRAMMAR OF ggplot2 -------------------------------------------------------
 
-# AESTHETICS --------------------------------------------------------------
+# AESTHETICS -------------------------------------------------------------------
 
 ?aes
 
@@ -90,24 +92,27 @@ ggplot(data = gapminder,
        mapping = aes(x = year, y = lifeExp))
 
 
-# The code for this workshop is verbose by design, but you do not *have* to spell out `mapping` and `data` each time you generate 
-# a plot. For instance, you can produce the graphic by running:
+# The code for this workshop is verbose by design, but you do not *have* to 
+# spell out `mapping` and `data` each time you generate a plot. For instance, 
+# you can produce the graphic by running:
   
 ggplot(gapminder,
        aes(year, lifeExp))
 
 
-# GEOMS -------------------------------------------------------------------
+# GEOMS ------------------------------------------------------------------------
 
 # All the base geoms:
 
 ls(pattern = '^geom_', env = as.environment('package:ggplot2'))
 
-# To generate scatterplots:
+# Scatterplots -----------------------------------------------------------------
 
-# Focus: relationship between the log of GDP per capita and life expectancy in gapminder. 
+# Focus: relationship between the log of GDP per capita and life expectancy
+# in gapminder. 
 
-# To make matters easier, we'll home-in on the latest year included in `gapminder` (2007). 
+# To make matters easier, we'll home-in on the latest year included 
+# in `gapminder` (2007). 
 
 ggplot(# Note that we're subsetting the data within the ggplot function:
   data = gapminder %>% filter(year == max(year)),
@@ -121,12 +126,13 @@ ggplot(# Note that we're subsetting the data within the ggplot function:
     # Adjusts the transparency of the points:
     alpha = 0.5)
 
-# In the plot above, we've _added_ a geometric object (points or circles) to our graphic by including the `+ geom_point()` argument. 
+# In the plot above, we've _added_ a geometric object (points or circles) to our
+# graphic by including the `+ geom_point()` argument. 
 
 # We can now tune or modify the aesthetic attributes of our `geom_point()` layer. 
 
-# For instance, we can adjust `colour` within our global `aes` function to ensure that points are shaded
-# pursuant to the `continent` variable in our data:
+# For instance, we can adjust `colour` within our global `aes` function to
+# ensure that points are shaded pursuant to the `continent` variable in our data:
   
 ggplot(data = gapminder %>% filter(year == max(year)),
        mapping = aes(x = log(gdpPercap), y = lifeExp,
@@ -139,8 +145,8 @@ ggplot(data = gapminder %>% filter(year == max(year)),
     alpha = 0.5)
 
 
-# We can also systematically adjust the *size* of our points.
-# Below, the size of the points corresponds to a country's population in 2007 (logged).
+# We can also systematically adjust the *size* of our points. Below,
+# the size of the points corresponds to a country's population in 2007 (logged).
 
 ggplot(data = gapminder %>% filter(year == max(year)),
        mapping = aes(x = log(gdpPercap), y = lifeExp,
@@ -154,12 +160,10 @@ geom_point(# Adjusts the transparency of the points:
 
 # Question
 
-# How can we adjust the `shape` of the points in our plot to ensure that they vary as a function of our `continent` variable?
+# How can we adjust the `shape` of the points in our plot to ensure that they 
+# vary as a function of our `continent` variable?
   
-
-
-
-
+# Scroll down for the answer:
 
 
 
@@ -178,18 +182,21 @@ ggplot(data = gapminder %>% filter(year == max(year)),
     alpha = 0.5)
 
 
-# Scatterplots:
+# Line Plots -------------------------------------------------------------------
 
-# Let's play around with some of the other data we have at our disposal --- specifically, data from `select_countries`.
+# Let's play around with some of the other data we have at our disposal ---
+# specifically, data from `select_countries`.
 
 # Here's an overview of the data frame:
 
 skim(select_countries)
 
-# Let's say we want to visualize how old-age dependency (`age_dependency`) has evolved over time for
-# each of the nation-states (Canada, the United States, Germany, Japan) featured in our data. 
+# Let's say we want to visualize how old-age dependency (`age_dependency`) has
+# evolved over time for each of the nation-states (Canada, the United States,
+# Germany, Japan) featured in our data. 
 
-# To kick things off, let's produce a rudimentary plot that makes use of the `geom_line()` function.
+# To kick things off, let's produce a rudimentary plot that makes use of the `
+# geom_line()` function.
 
 ggplot(data = select_countries,
        aes(x = year, y = age_dependency,
@@ -201,10 +208,12 @@ ggplot(data = select_countries,
 
 # Here's what would happen if we didn't modify the `group` aesthetic.
 
-# We've produced four unique trajectories, but we don't know what these trajectories mean.
+# We've produced four unique trajectories, but we don't know what these 
+# trajectories mean.
 
 # What can we do about it?
   
+# Scroll down for the answer!
 
 
 
@@ -224,7 +233,8 @@ ggplot(data = select_countries,
   geom_line(linetype = "dashed")
 
 
-# We can also ensure that our `linetype`s vary as a function of the `country` variable: 
+# We can also ensure that our `linetype`s vary as a function of the `country`
+# variable: 
   
 ggplot(data = select_countries,
        aes(x = year, y = age_dependency, 
@@ -236,13 +246,11 @@ ggplot(data = select_countries,
 
 # Question 
 
-# How can we adjust the `linewidth` of the trajectories in our plot to ensure that they vary as a function of 
-# our `fertility_rate` variable? 
+# How can we adjust the `linewidth` of the trajectories in our plot to ensure 
+# that they vary as a function of our `fertility_rate` variable? 
 
 # For this exercise, do not include a `linetype` argument in your `aes()` call.
-
-
-
+# Scroll down for the answer.
 
 
 
@@ -255,8 +263,6 @@ ggplot(data = select_countries,
 
 # Answer
 
-
-
 ggplot(data = select_countries,
        aes(x = year, y = age_dependency, 
            colour = country,
@@ -264,16 +270,18 @@ ggplot(data = select_countries,
            linewidth = fertility_rate)) +
 geom_line()
 
-# Bar Plots
+# Bar Plots --------------------------------------------------------------------
 
-# To produce a few basic bar plots in `ggplot2`, let's use the `select_countries_sex` data frame. 
+# To produce a few basic bar plots in `ggplot2`, let's use the 
+# `select_countries_sex` data frame. 
 
 # Here's a look at the data frame in question.
 
 skim(select_countries_sex)
 
-# For now, let's begin by producing a bar plot that highlights sex differences in life expectancy in Canada, the United States, 
-# Germany and Japan in the year 2020.
+# For now, let's begin by producing a bar plot that highlights sex differences 
+# in life expectancy in Canada, the United States, Germany and Japan in the 
+# year 2020.
 
 ggplot(data = select_countries_sex %>% filter(year == max(year)),
        mapping = aes(x = country, y = life_expectancy,
@@ -301,8 +309,8 @@ geom_col(colour = "white")
 
 # How can we do this in a straightforward manner? 
 
-# A simple approach is shown below: here, we simply change the `fill` of our bars so they correspond to the `sex` variable in 
-# our input data:
+# A simple approach is shown below: here, we simply change the `fill` of our 
+# bars so they correspond to the `sex` variable in our input data:
   
 ggplot(data = select_countries_sex %>% filter(year == max(year)),
        mapping = aes(x = country,
@@ -315,9 +323,14 @@ ggplot(data = select_countries_sex %>% filter(year == max(year)),
 
 # Let's add a bit more complexity. To do so, we'll produce a graph that:
 
-# 1. Reproduces the bar plot from above --- which illustrates sex differences in life expectancy across four countries in the year 2020.
+# 1. Reproduces the bar plot from above --- which illustrates sex differences in
+#    life expectancy across four countries in the year 2020.
 
-# 2. Displays the *distribution* of life expectancy for females/males across these 4 countries in the last half century (1970-2020). 
+# 2. Displays the *distribution* of life expectancy for females/males across 
+#    these 4 countries in the last half century (1970-2020). 
+
+# Adding geoms -----------------------------------------------------------------
+
 
 ggplot(data = select_countries_sex %>% filter(year == max(year)),
        mapping = aes(x = country, y = life_expectancy,
@@ -337,19 +350,21 @@ geom_boxplot(linewidth = 0.3,
 
 # What do you notice about the arguments within the `geom_boxplot()` function?
 
+# STATISTICAL TRANSFORMATIONS --------------------------------------------------
 
-# STATISTICAL TRANSFORMATIONS ---------------------------------------------
+# *Most* of the plots covered thus far feature an explicit mapping of variables
+# to visual. However, many of the `geom`s available in `ggplot2` feature 
+# statistical transformations of the inputs to ease interpretation of the 
+# relationships between variables in our data. 
 
-# *Most* of the plots covered thus far feature an explicit mapping of variables to visuals: 
-# However, many of the `geom`s available in `ggplot2` feature statistical transformations of the inputs to ease
-# interpretation of the relationships between variables in our data. 
+# For our purposes, we'll focus on a couple of statistical transformations and a
+# ssociated functions. To this end, we'll work with some new `geom`s that are 
+# powered by `stat_*` functions under the hood.
 
-# For our purposes, we'll focus on a couple of statistical transformations and associated functions. 
-# To this end, we'll work with some new `geom`s that are powered by `stat_*` functions under the hood.
+# Smoothed Conditional Means ---------------------------------------------------
 
-# Smoothed Conditional Means
-
-# We'll begin by visualizing how the fertility rate has evolved over time in Canada, the United States, Germany and Japan. 
+# We'll begin by visualizing how the fertility rate has evolved over time in 
+# Canada, the United States, Germany and Japan. 
 
 ggplot(data = select_countries,
        mapping = aes(x = year, 
@@ -357,10 +372,11 @@ ggplot(data = select_countries,
                      colour = country)) +
 geom_line()
 
-# The plot below uses `geom_smooth()` to simplify the same trends we encountered above. 
+# The plot below uses `geom_smooth()` to simplify the same trends we encountered 
+# above. 
 
-# The function is powered by `stat_smooth()` under the hood, which (by default) uses local polynomial regressions or
-# general additive models.
+# The function is powered by `stat_smooth()` under the hood, which (by default) 
+# uses local polynomial regressions or general additive models.
 
 ggplot(data = select_countries,
        mapping = aes(x = year, y = fertility_rate, 
@@ -369,10 +385,11 @@ geom_smooth(mapping = # Adjusts hue of the confidence intervals:
                      aes(fill = country),
             alpha = 0.5)
 
+# We can adjust how we're "smoothing" our data by toggling the `method` 
+# argument within `geom_smooth()`. 
 
-# We can adjust how we're "smoothing" our data by toggling the `method` argument within `geom_smooth()`. 
-
-# Here's how to generate estimates from a linear model (in lieu of the default non-parametric approaches),
+# Here's how to generate estimates from a linear model (in lieu of the default
+# non-parametric approaches),
 
 ggplot(data = select_countries,
       aes(x = year,
@@ -382,7 +399,7 @@ geom_smooth(aes(fill = country),
             method = "lm",
             alpha = 0.5)
 
-# Density of Observations
+# Density of observations ------------------------------------------------------
 
 ggplot(data = gapminder %>% 
               # Zeroing in on latest year:
@@ -407,7 +424,9 @@ ggplot(data = gapminder %>%
 geom_density(alpha = 0.5)
 
 
-# SCALES ------------------------------------------------------------------
+# SCALES -----------------------------------------------------------------------
+
+# Pruning axes -----------------------------------------------------------------
 
 ggplot(data = select_countries,
        mapping = aes(x = year, 
@@ -423,7 +442,7 @@ scale_x_continuous(# Prunes the x-axis by setting new limits:
                    # Here, 2000 to 2020 in increments of 5 (years):
                    breaks = seq(2000, 2020, by = 5)) 
 
-
+# Modifying linetype aesthetics ------------------------------------------------
 
 ggplot(data = select_countries,
        mapping = aes(x = year, 
@@ -444,6 +463,8 @@ scale_linetype_manual(# Removing the legend title for linetypes:
                       values = "dashed")
 
 
+# Modifying colour/fill of geometric layers ------------------------------------
+
 ggplot(data = select_countries,
        mapping = aes(x = year, y = fertility_rate, 
                      colour = country)) +
@@ -461,7 +482,7 @@ scale_linetype_manual(name = "",
 scale_colour_brewer(palette = "Dark2") +
 scale_fill_brewer(palette = "Dark2")
 
-
+# Working with "dates" ---------------------------------------------------------
 
 # Data can be piped in as a part of a longer code sequence:
 mobility_covdata %>% 
@@ -472,6 +493,7 @@ ggplot(., aes(x = date,
               colour = transportation_type, 
               fill = transportation_type)) +
 geom_smooth()
+
 
 
 mobility_covdata %>% 
@@ -490,8 +512,7 @@ scale_x_date(# Breaks between dates:
              # Date format --- run ?strptime for more information:
              date_labels = "%D")
 
-
-# COORDS ------------------------------------------------------------------
+# COORDS -----------------------------------------------------------------------
 
 ggplot(data = select_countries_sex %>%  
               filter(country == "Canada"),
@@ -516,13 +537,14 @@ ggplot(data = select_countries_sex %>%  filter(country == "Canada"),
                                 "2010", "1970")) +
   coord_polar()
 
+# An aside: pie charts ---------------------------------------------------------
 
-# An aside: pie charts
+# Pie charts are popular, but should generally be avoided 
+# (https://kieranhealy.org/blog/archives/2017/04/06/saying-no-to-pie/)
 
-# Pie charts are popular, but should generally be avoided (https://kieranhealy.org/blog/archives/2017/04/06/saying-no-to-pie/)
-
-# That said, you may have to make one at some point. With that in mind, here's a very simple example ...
-# ... but beware: this snippet includes code we have yet to cover.
+# That said, you may have to make one at some point. With that in mind, 
+#here's a very simple example ... but beware: this snippet includes code 
+# we have yet to cover.
 
 select_countries_sex %>%
   filter(year == 1980, country == "Germany") %>% 
@@ -538,7 +560,9 @@ select_countries_sex %>%
   labs(title = "Sex Distribution in Germany (1980)") +
   scale_fill_brewer(palette = "Set1")
 
-# FACETS ------------------------------------------------------------------
+# FACETS -----------------------------------------------------------------------
+
+# facet_wrap() -----------------------------------------------------------------
 
 mobility_covdata %>% 
   ggplot(., aes(x = date, 
@@ -555,7 +579,6 @@ mobility_covdata %>%
   # facets (or panels):
   facet_wrap(~city, nrow = 2)
 
-
 ggplot(data = select_countries_sex,
        mapping = aes(x = year, y = life_expectancy, 
                      fill = sex, 
@@ -569,6 +592,8 @@ ggplot(data = select_countries_sex,
   scale_fill_grey() +
   scale_colour_grey() +
   coord_polar() 
+
+# facet_grid() -----------------------------------------------------------------
 
 select_countries %>% 
   # Reorienting data (to long/"tidy" format):
@@ -588,7 +613,7 @@ select_countries %>%
   scale_fill_brewer(palette = "Dark2")
 
 
-# ADJUSTING LABELS --------------------------------------------------------
+# ADJUSTING LABELS -------------------------------------------------------------
 
 ggplot(gapminder %>% filter(year == max(year) |
                               year == min(year)),
@@ -611,7 +636,7 @@ ggplot(gapminder %>% filter(year == max(year) |
   scale_size_continuous(labels = scales::comma_format(suffix = " +")) 
 
 
-# ADJUSTING THEMES --------------------------------------------------------
+# ADJUSTING THEMES -------------------------------------------------------------
 
 # Zeroing in on the first and last year in the gapminder df:
 gapminder %>% filter(year == max(year) |
@@ -654,8 +679,7 @@ gapminder %>% filter(year == max(year) |
 
 
 
-# ADJUSTING GUIDES --------------------------------------------------------
-
+# ADJUSTING GUIDES -------------------------------------------------------------
 
 ggplot(gapminder %>% filter(year == max(year) |
                               year == min(year)), 
@@ -698,9 +722,9 @@ ggplot(gapminder %>% filter(year == max(year) |
     title.hjust = 0.5))
 
 
-# ADDITIONAL GEOMS --------------------------------------------------------
+# ADDITIONAL GEOMS -------------------------------------------------------------
 
-# Density Ridges
+# ggridges ---------------------------------------------------------------------
 
 ggplot(gapminder %>% 
          filter(year == max(year),
@@ -723,7 +747,7 @@ ggplot(gapminder %>%
   # Allows plotting outside of the plot margin/panel:
   coord_cartesian(clip = "off") 
 
-# Label Repel
+# geom_repel() -----------------------------------------------------------------
 
 select_countries %>% 
   # Zooming on 1970 and 2020
@@ -769,7 +793,9 @@ select_countries %>%
         axis.text.y = element_text(size = 10))
 
 
-# MORE THEMES, SCHEMES ----------------------------------------------------
+# MORE THEMES, SCHEMES ---------------------------------------------------------
+
+# Colour blind friendly themes -------------------------------------------------
 
 select_countries %>% 
   pivot_longer(!c(country, year),
@@ -803,6 +829,7 @@ select_countries %>%
         axis.text.x = element_text(size = 12),
         axis.text.y = element_text(size = 10))
 
+# gglgbtq ----------------------------------------------------------------------
 
 ggplot(gapminder %>% 
          filter(year == max(year),
@@ -834,9 +861,9 @@ ggplot(gapminder %>%
 # paletteer::palettes_d_names
 
 
-# VISUALIZATIONS FOR POPULATION RESEARCH ----------------------------------
+# VISUALIZATIONS FOR POPULATION RESEARCH ---------------------------------------
 
-# Heatmaps
+# Heatmaps  --------------------------------------------------------------------
 
 # Reproducing Kieran Healy's mortality heat map (https://kieranhealy.org/prints/mortality-v/)
 
@@ -864,7 +891,7 @@ fr.mort %>% as_tibble() %>%
         legend.justification = "top")
 
 
-# Lexis Diagrams
+# Lexis Diagrams ---------------------------------------------------------------
 
 lexis_grid(year_start = 1990,
            year_end = 2020, 
@@ -894,7 +921,7 @@ lexis_grid(year_start = 1990,
            colour = "white")
 
 
-# Population Pyramids
+# Population Pyramids ----------------------------------------------------------
 
 can_binned_age %>% 
   filter(year == 2021) %>% 
