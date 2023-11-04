@@ -344,7 +344,8 @@ geom_boxplot(linewidth = 0.3,
 # However, many of the `geom`s available in `ggplot2` feature statistical transformations of the inputs to ease
 # interpretation of the relationships between variables in our data. 
 
-# For our purposes, we'll focus on a couple of statistical transformations and associated functions. To this end, we'll work with some new `geom`s that are _powered_ by `stat_*` functions under the hood.
+# For our purposes, we'll focus on a couple of statistical transformations and associated functions. 
+# To this end, we'll work with some new `geom`s that are powered by `stat_*` functions under the hood.
 
 # Smoothed Conditional Means
 
@@ -538,9 +539,6 @@ select_countries_sex %>%
   scale_fill_brewer(palette = "Set1")
 
 # FACETS ------------------------------------------------------------------
-
-#| warning: false
-#| message: false
 
 mobility_covdata %>% 
   ggplot(., aes(x = date, 
@@ -841,7 +839,6 @@ ggplot(gapminder %>%
 # Heatmaps
 
 # Reproducing Kieran Healy's mortality heat map (https://kieranhealy.org/prints/mortality-v/)
-
 
 fr.mort %>% as_tibble() %>% 
   filter(!Group == "total", !Age > 100) %>% 
