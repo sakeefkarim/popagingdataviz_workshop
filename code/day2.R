@@ -4,8 +4,11 @@
 library(systemfonts)
 library(tidyverse)
 
+
 # Mapping in ggplot2
 library(sf)
+library(sp)
+library(terra)
 library(ggspatial)
 library(rnaturalearth)
 library(rnaturalearthdata)
@@ -25,7 +28,6 @@ library(leafpop)
 
 library(plotly)
 library(gganimate)
-library(gifski)
 library(ggiraph)
 
 # Misc
@@ -35,10 +37,11 @@ library(see)
 library(scales)
 library(ggrepel)
 
-
 # LOADING THE DATA -------------------------------------------------------------
 
+
 load("./data/day2.RData")
+
 
 # BASIC MAPS -------------------------------------------------------------------
 
@@ -67,6 +70,9 @@ ne_countries(scale = "medium",
 #  coord_sf(crs = st_crs("ESRI:102035")) +
   theme_map(base_family = "IBM Plex Sans") +
   labs(title = "A Map of the World")
+
+usethis::edit_r_environ()
+
 
 # Grid of Maps (Plots) ---------------------------------------------------------
 
