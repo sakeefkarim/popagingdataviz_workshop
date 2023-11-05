@@ -42,10 +42,10 @@ library(ggrepel)
 
 load("./data/day2.RData")
 
-
 # BASIC MAPS -------------------------------------------------------------------
 
 # A Map of the World -----------------------------------------------------------
+
 
 ne_countries(scale = "medium",
              returnclass = "sf") %>% 
@@ -70,8 +70,6 @@ ne_countries(scale = "medium",
 #  coord_sf(crs = st_crs("ESRI:102035")) +
   theme_map(base_family = "IBM Plex Sans") +
   labs(title = "A Map of the World")
-
-usethis::edit_r_environ()
 
 
 # Grid of Maps (Plots) ---------------------------------------------------------
