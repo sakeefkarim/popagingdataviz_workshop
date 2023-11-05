@@ -326,6 +326,8 @@ duval_county %>% ggplot() +
 
 # CANCENSUS --------------------------------------------------------------------
 
+# Montreal  --------------------------------------------------------------------
+
 set_cancensus_api_key('YOUR KEY', install = TRUE)
 
 
@@ -385,11 +387,79 @@ mapView(fsu_sf, color = "white",
 
 # Leaflet ----------------------------------------------------------------------
 
+# Where workshop participants were born  ---------------------------------------
+
+born_data
+
+continent_palette <- colorFactor(palette = c("dodgerblue", "red", 
+                                             "orange", "black", "purple"),
+                                 domain = born_data$continent)
+
+
+leaflet(born_data) %>%
+              # addProviderTiles(providers$CartoDB.DarkMatter) %>% 
+addProviderTiles(providers$CartoDB.Voyager) %>% 
+addCircleMarkers(lng = born_data$long, 
+                 lat = born_data$lat,
+                 fillOpacity = 0.5,
+                 weight = 10,
+                 radius = ~ sqrt(n) * 8,
+                 color = ~continent_palette(continent),
+                 stroke = FALSE)  
+  # setView(lng= fsu$long, lat = fsu$lat, zoom = 4) 
+  
+                   
+
 
 # MORE INTERACTIVITY -----------------------------------------------------------
 
 
 # plotly -----------------------------------------------------------------------
+
+old_age_dependency  <- ggplot(data = select_countries,
+                              aes(x = year, y = age_dependency, 
+                                 colour = country)) +
+                       geom_line(mapping =) +
+                       scale_colour_colorblind() +
+                       theme_bw(base_family = "Inconsolata") +
+                       labs(colour = "", x = "", y = "Old Age Dependency")
+           
+
+select_countries_modified <- select_countries %>% 
+                             mutate(tooltip = paste(" Country:", 
+                                                    country, "<br>", 
+                                                    "Year:", year, "<br>",
+                                                    "Old Age Depndency:",
+                                                     round(age_dependency, 2)))
+
+old_age_dependency_new  <- ggplot(data = select_countries_modified,
+                                  aes(x = year, y = age_dependency, 
+                                      text = tooltip,
+                                      group = country,
+                                      colour = country)) +
+                           geom_line() +
+                           scale_colour_colorblind() +
+                           theme_bw(base_family = "Inconsolata") +
+                           labs(colour = "", x = "", y = "Old Age Dependency") 
+
+ggplotly(old_age_dependency_new,
+         tooltip = "text")
+
+
+# Adjusting the "hover label" and legend:
+
+ggplotly(old_age_dependency_new,
+         tooltip = "text") %>% 
+# Changes font of tooltip:
+layout(hoverlabel = list(font = list(family = "Inconsolata")),
+       legend = list(x = 0,
+                      y = 1,
+                     traceorder = "normal"))
+
+
+
+# Use the select_countries data frame + plotly to easily produce some 
+# interactive plots of your own (in the next 10 mintutes or so).
 
 
 # gganimate --------------------------------------------------------------------

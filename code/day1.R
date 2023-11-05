@@ -6,7 +6,6 @@
 # Companion Script File
 # CC-BY-SA 4.0
 
-
 # PRELIMINARIES ----------------------------------------------------------------
 
 library(systemfonts)
