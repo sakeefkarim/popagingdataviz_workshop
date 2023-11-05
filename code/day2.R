@@ -314,7 +314,8 @@ leon_county %>% ggplot() +
 
 
 duval_county %>% ggplot() +
-                 geom_sf(mapping = aes(fill = non_white_share), colour = "grey") +
+                 geom_sf(mapping = aes(fill = non_white_share), 
+                         colour = "grey") +
                  theme_map(base_family = "Inconsolata") +
                  scale_fill_gradient2_tableau() +
                  labs(title = "Duval County") +
@@ -457,9 +458,8 @@ layout(hoverlabel = list(font = list(family = "Inconsolata")),
                      traceorder = "normal"))
 
 
-
 # Use the select_countries data frame + plotly to easily produce some 
-# interactive plots of your own (in the next 10 mintutes or so).
+# interactive plots of your own (in the next 10-15 mintutes or so).
 
 
 # gganimate --------------------------------------------------------------------
