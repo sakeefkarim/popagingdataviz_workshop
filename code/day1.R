@@ -38,7 +38,7 @@ library(lattice)
 library(ggrepel)
 library(ggridges)
 library(ggtext)
-
+library(ggdist)
 
 # LOADING THE DATA -------------------------------------------------------------
 

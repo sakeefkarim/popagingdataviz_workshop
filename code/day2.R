@@ -4,8 +4,8 @@
 library(systemfonts)
 library(tidyverse)
 
-
 # Mapping in ggplot2
+
 library(sf)
 library(sp)
 library(terra)
@@ -39,21 +39,25 @@ library(ggrepel)
 
 # LOADING THE DATA -------------------------------------------------------------
 
-
 load("./data/day2.RData")
 
 # BASIC MAPS -------------------------------------------------------------------
 
 # A Map of the World -----------------------------------------------------------
 
+# Using rnaturalearth to generate a map of the world in seconds:
 
 ne_countries(scale = "medium",
-             returnclass = "sf") %>% 
+             returnclass = "sf") %>%
+# Removing Antarctica from the map ... 
   filter(!name == "Antarctica") %>% 
   ggplot() + 
+# The workhorse geom (via sf) to produce maps -- but not our only option:
   geom_sf() +
   theme_map(base_family = "IBM Plex Sans") +
   labs(title = "A Map of the World")
+
+# We can easily adjust or experiment with different map projections:
 
 ne_countries(scale = "medium",
              returnclass = "sf") %>% 
@@ -74,14 +78,22 @@ ne_countries(scale = "medium",
 
 # Grid of Maps (Plots) ---------------------------------------------------------
 
+# Here's a fun way to sneak in a new package --- patchwork. Thanks to patchwork
+# (and packages like ggpubr), we can easily combine plots:
+
+# Here's the popular Robinson projection:
+
 map_robinson <- ne_countries(scale = "medium",
                              returnclass = "sf") %>% 
                 filter(!name == "Antarctica") %>% 
                 ggplot() + 
+                # Adjusting the colour of "countries" on the map:
                 geom_sf(fill = "red") +
                 coord_sf(crs = st_crs("ESRI:53030")) +
                 theme_light(base_family = "IBM Plex Sans")  +
                 theme(text = element_blank())
+
+# An orthographic projection:
 
 map_orthographic <- ne_countries(scale = "medium",
                              returnclass = "sf") %>% 
@@ -91,18 +103,28 @@ map_orthographic <- ne_countries(scale = "medium",
                     coord_sf(crs = st_crs("ESRI:102035")) 
 
 
-map_robinson + map_orthographic + plot_layout(nrow = 2)
+# Now, we easily combine plots by simply using "+" 
+
+map_robinson + map_orthographic + 
+              # Adjusts the layout of the plot -- here, two rows (in lieu of 1):
+               plot_layout(nrow = 2)
 
 
 # INTRODUCING STATS ------------------------------------------------------------
 
+# Like any other geom, we can fill in our maps based on some variables 
+# embedded in our input data frame:
+
 map_data %>% 
   filter(!name == "Antarctica",
+         # For siplicity, isolating 2015:
          year == 2015) %>% 
   ggplot() + 
   geom_sf(colour = "white",
           linewidth = 0.1,
+          # Filling in data as a function of TFR (percentiles):
           mapping = aes(fill = ntile(fertility_rate, 100))) +
+  # Creating our own gradient scale:
   scale_fill_gradient2(low = muted("pink"), 
                        high = muted("red")) +
   coord_sf(crs = st_crs("ESRI:53030")) +
@@ -157,11 +179,15 @@ map_data %>%
 
 # Zooming in on Canada ---------------------------------------------------------
 
+# Data comes from the mapcan package:
+
 province_territories_2017 %>% 
   ggplot(., aes(x = long, y = lat, group = group)) +
-                  geom_polygon(mapping = aes(fill = population),
-                               colour = "white",
-                               linewidth = 0.2) +
+  # Notice something?
+  geom_polygon(mapping = aes(fill = population),
+                             colour = "white",
+                              linewidth = 0.2) +
+  # Why'd we switch things up?
   coord_sf() +
   theme_map(base_family = "IBM Plex Sans") +
   theme(legend.position = "top") +
@@ -174,6 +200,8 @@ province_territories_2017 %>%
 
 # Zooming in on the US ---------------------------------------------------------
 
+# US election data:
+
 us_vote %>% ggplot() +
             facet_wrap(~year, nrow = 2) +
             geom_polygon(colour = "white",
@@ -183,6 +211,7 @@ us_vote %>% ggplot() +
                                        group = group)) +
             coord_sf() +
             theme_map(base_family = "Inconsolata") +
+            # From the ggthemes package:
             scale_fill_continuous_tableau(palette = "Red",
                                           labels = function(x) paste0(x, "%")) +
             labs(fill = "Trump Share (Percentile)") +
@@ -213,6 +242,7 @@ tallahassee_shp %>%
 tallahassee_shp %>% 
   ggplot() +
   geom_sf() +
+  # Notice us isolating the first row via the slice function:
   geom_point(data = locations %>% slice(1),
              mapping = aes(x = long, y = lat)) +
   geom_label_repel(data = locations %>% slice(1),
@@ -222,6 +252,7 @@ tallahassee_shp %>%
 
 tallahassee_shp %>% 
   ggplot() +
+  # Adding FSU colours:
   geom_sf(fill = "#782F40", colour = "white") +
   geom_point(colour = "#CEB888",
              size = 3.5,
@@ -240,6 +271,8 @@ tallahassee_shp %>%
 
 # Montreal (Exercise) ----------------------------------------------------------
 
+# canada_cd from Monica Alexander ...
+
 mtl <- canada_cd %>% ggplot() +
                      geom_sf(colour = "grey")  + theme_void() +
                      coord_sf(xlim = c(-75, -73),
@@ -248,6 +281,9 @@ mtl <- canada_cd %>% ggplot() +
 
 # How can we highlight McGill University (see above for some guidance ---
 # or scroll down for the answer!)
+
+
+
 
 
 
@@ -378,6 +414,7 @@ fsu <- tibble(site = "Florida State University",
        geocode(address = address)
 
 fsu_sf <- st_as_sf(fsu, coords = c("long", "lat"),
+                   # WGS84 projection:
                    crs = 4326)
 
 mapView(fsu_sf, color = "white", 
@@ -385,6 +422,9 @@ mapView(fsu_sf, color = "white",
         layer.name = "Florida State University",
         popup = popupIframe("https://www.youtube.com/embed/dB2VUuTm7MU?si=yZ2Y654rs-aDMZn4",
                            width = 300, height = 300))
+
+# popupIframe function comes from
+# https://rdrr.io/github/r-spatial/leafpop/src/R/graph.R
 
 # Leaflet ----------------------------------------------------------------------
 
