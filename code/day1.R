@@ -697,7 +697,7 @@ ggplot(gapminder %>% filter(year == max(year) |
        x = "Log of Per Capita GDP", 
        y = "Life Expectancy in Years", colour = "",
        size = "Log of Population") +
-  scale_size_continuous(# Range of plot sizes:
+  scale_size_binned(# Range of plot sizes:
     range = c(0.1, 3.5),
     labels = function(x) paste(x, "+")) +
   scale_colour_brewer(palette = "Dark2") +
@@ -710,16 +710,15 @@ ggplot(gapminder %>% filter(year == max(year) |
         legend.position = "bottom",
         legend.key.size = unit(1, "cm"),
         legend.box = "vertical") +
-  guides(# Rearranging order of legends; colour now appears first.
-    colour = guide_legend(order = 1, 
-                          # Overriding aes - all keys are 
-                          # at size = 5.
-                          override.aes = list(size = 5))) +
-  guides(size = guide_legend(# Push legend title to the bottom:
+  guides(size = guide_bins(# Push legend title to the bottom:
     title.position = "bottom",
     # Centring legend title.
-    title.hjust = 0.5))
-
+    title.hjust = 0.5)) +
+  guides(# Rearranging order of legends; colour now appears first.
+    colour = guide_legend(order = 1,
+                          # Overriding aes - all keys are 
+                          # at size = 5.
+                          override.aes = list(size = 5))) 
 
 # ADDITIONAL GEOMS -------------------------------------------------------------
 
