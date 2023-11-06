@@ -39,6 +39,7 @@ library(ggrepel)
 library(ggridges)
 library(ggtext)
 library(ggdist)
+library(LexisPlotR)
 
 # LOADING THE DATA -------------------------------------------------------------
 
