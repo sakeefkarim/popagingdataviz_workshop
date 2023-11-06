@@ -8,7 +8,7 @@
 
 Then, the course will slowly build in complexity. Concretely, participants will be exposed to modules on (1) generating population pyramids and other plots that are germane to population research (e.g., Lexis diagrams); (2) leveraging interactivity and animations to bring data visualizations to life; and (3) visualizing statistical quantities of substantive interest (e.g., average marginal effects, adjusted predictions) to clarify model results.
 
-The workshop will draw on a range of packages---including, but not limited to, `tidycensus`, `leaflet`, `mapview` and `cansim`---as well as a series of hands-on exercises designed to concretize high-level concepts and principles related to data visualization. All workshop materials are available (and will be maintained) on this course website and the companion GitHub repository.
+The workshop will draw on a range of packages---including, but not limited to, `tidycensus`, `leaflet`, `mapview` and `cansim`---as well as a series of hands-on exercises designed to concretize high-level concepts and principles related to data visualization. All workshop materials are available (and will be maintained) on this repository and the [course website](https://popagingdataviz.com/).
 
 ### Sponsors
 
