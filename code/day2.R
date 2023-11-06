@@ -1,3 +1,10 @@
+# ------------------------------------------------------------------------------
+
+# Day 2: Maps and Interactivity
+# PopAging DataViz
+# Sakeef M. Karim
+# Companion Script File
+# CC-BY-SA 4.0
 
 # PRELIMINARIES ----------------------------------------------------------------
 
