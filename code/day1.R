@@ -433,6 +433,7 @@ ggplot(data = gapminder %>%
                      fill = continent)) +
 geom_density(alpha = 0.5)
 
+# An aside: statistical summaries 
 
 ggplot(data = gapminder %>% 
          # Zeroing in on latest year and removing Oceania
