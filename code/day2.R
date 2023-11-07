@@ -59,7 +59,7 @@ ne_countries(scale = "medium",
 # Removing Antarctica from the map ... 
   filter(!name == "Antarctica") %>% 
   ggplot() + 
-# The workhorse geom (via sf) to produce maps -- but not our only option:
+# The workhorse geom to produce maps -- but not our only option:
   geom_sf() +
   theme_map(base_family = "IBM Plex Sans") +
   labs(title = "A Map of the World")
