@@ -290,9 +290,10 @@ ggplot(data = select_countries_sex %>% filter(year == max(year)),
                      group = sex)) +
   geom_col(# To ensure that bars are placed
     # side-by-side --- and not stacked!
-    position = "dodge", 
+    position = "identity", 
     colour = "white") 
 
+?position_
 
 # Here's what would happen if our `position` argument was left alone.
 
@@ -330,7 +331,6 @@ ggplot(data = select_countries_sex %>% filter(year == max(year)),
 #    these 4 countries in the last half century (1970-2020). 
 
 # Adding geoms -----------------------------------------------------------------
-
 
 ggplot(data = select_countries_sex %>% filter(year == max(year)),
        mapping = aes(x = country, y = life_expectancy,
@@ -402,14 +402,24 @@ geom_smooth(aes(fill = country),
 # Density of observations ------------------------------------------------------
 
 ggplot(data = gapminder %>% 
-              # Zeroing in on latest year:
-              filter(year == max(year)),
-       mapping = aes(x = lifeExp)) +
-geom_histogram(# after_stat() computes density of observations 
-               # *after* data has been discretized via 
-               # stat_bin():
-               mapping = aes(y = after_stat(density)),
-               binwidth = 2)
+              # Zeroing in on latest year and removing Oceania
+              # which has only two observations:
+              filter(year == max(year),
+                     !continent == "Oceania"),
+       mapping = aes(x = lifeExp,
+                     # Ensuring the "fill" (colour inside the distribution) 
+                     # and "colour" (the line) have the same attributes:
+                     colour = continent)) +
+geom_freqpoly(mapping = aes(y = after_stat(density)),
+              binwidth = 5)
+
+# 
+# gapminder %>% 
+#   filter(year == max(year), 
+#          !continent == "Oceania") %>% 
+#   ggplot(aes(x = lifeExp,
+#              colour = continent)) +
+#   geom_freqpoly(binwidth = 5)
 
 ggplot(data = gapminder %>% 
               # Zeroing in on latest year and removing Oceania
