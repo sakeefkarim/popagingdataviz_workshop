@@ -434,6 +434,17 @@ ggplot(data = gapminder %>%
 geom_density(alpha = 0.5)
 
 
+ggplot(data = gapminder %>% 
+         # Zeroing in on latest year and removing Oceania
+         # which has only two observations:
+         filter(year == max(year)), 
+       aes(x = continent, y = lifeExp)) +
+  geom_point(colour = "lightgrey") +
+  stat_summary(fun.data = "mean_cl_boot", 
+               colour = "skyblue", 
+               linewidth = 2,
+               size = 1)
+
 # SCALES -----------------------------------------------------------------------
 
 # Pruning axes -----------------------------------------------------------------
