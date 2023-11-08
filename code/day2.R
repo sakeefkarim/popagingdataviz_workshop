@@ -477,7 +477,7 @@ mapView(fsu_sf, color = "white",
         # Size of point:
         cex = 25,
         popup = popupIframe("https://www.youtube.com/embed/dB2VUuTm7MU?si=yZ2Y654rs-aDMZn4",
-                           width = 300, height = 300))
+                           width = 500, height = 300))
 
 # popupIframe function comes from
 # https://rdrr.io/github/r-spatial/leafpop/src/R/graph.R
@@ -502,7 +502,7 @@ select_countries_modified <- select_countries %>%
                              mutate(tooltip = paste(" Country:", 
                                                     country, "<br>", 
                                                     "Year:", year, "<br>",
-                                                    "Old Age Depndency:",
+                                                    "Old Age Dependency:",
                                                      round(age_dependency, 2)))
 
 old_age_dependency_new  <- ggplot(data = select_countries_modified,
