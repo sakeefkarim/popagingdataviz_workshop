@@ -35,7 +35,9 @@ library(leafpop)
 
 library(plotly)
 library(gganimate)
-library(ggiraph)
+library(transformr)
+library(htmltools)
+library(gifski)
 
 # Misc
 
@@ -121,6 +123,8 @@ map_robinson + map_orthographic +
 
 # Like any other geom, we can fill in our maps based on some variables 
 # embedded in our input data frame:
+
+# Get a sense of the data:
 
 map_data %>% 
   filter(!name == "Antarctica",
@@ -217,14 +221,17 @@ us_vote %>% ggplot() +
                                        fill = ntile(republican, 100),
                                        group = group)) +
             coord_sf() +
-            theme_map(base_family = "Inconsolata") +
+            theme_minimal(base_family = "Inconsolata") +
             # From the ggthemes package:
             scale_fill_continuous_tableau(palette = "Red",
                                           labels = function(x) paste0(x, "%")) +
             labs(fill = "Trump Share (Percentile)") +
-            theme(legend.position = "right") +
-            guides(fill = guide_colorbar(title.position = "top"))
-            
+            theme(panel.grid = element_blank(),
+                  axis.text = element_blank(),
+                  axis.title = element_blank(),
+                  legend.position = "bottom", 
+                  strip.text = element_text(size = 11)) +
+            guides(fill = guide_legend(title.position = "top"))            
 
 # Zooming in even more/geocoding -----------------------------------------------
 
@@ -257,6 +264,8 @@ tallahassee_shp %>%
                                  label = site))
 
 
+# Adding some FSU-specific colours:
+
 tallahassee_shp %>% 
   ggplot() +
   # Adding FSU colours:
@@ -265,14 +274,15 @@ tallahassee_shp %>%
              size = 3.5,
              data = locations %>% slice(1),
              mapping = aes(x = long, y = lat)) +
-  geom_label_repel(family = "IBM Plex Sans",
+  geom_label_repel(family = "Inconsolata",
                    fill = "#CEB888",
                    colour = "white",
+                   size = 4.5,
                    nudge_y = 0.02,
                    data = locations %>% slice(1),
                    mapping = aes(x = long, y = lat,
                                  label = site)) +
-  theme_void(base_family = "IBM PLex Sans") +
+  theme_void(base_family = "Inconsolata") +
   labs(title = "Tallahassee, Florida") 
 
 
@@ -349,21 +359,31 @@ duval_county <- get_acs(state = "FL",
 
 leon_county %>% ggplot() +
                    geom_sf(mapping = aes(fill = non_white_share), 
-                           colour = "grey") +
+                           colour = "white") +
                    theme_map(base_family = "IBM Plex Sans") +
-                   scale_fill_gradient2_tableau() +
-                   labs(title = "Leon County") 
+                   scale_fill_viridis_c(guide = guide_legend(),
+                                        labels = function(x) paste0(x * 100, "%")) +
+                   labs(fill = "Non-White Share", 
+                        title = "Leon County") +
+                  theme(legend.position = "bottom",
+                        plot.title = element_text(size = 14),
+                        legend.title = element_text(size = 12),
+                        legend.text = element_text(size = 11))
 
 
 
 duval_county %>% ggplot() +
                  geom_sf(mapping = aes(fill = non_white_share), 
-                         colour = "grey") +
+                         colour = "white") +
                  theme_map(base_family = "Inconsolata") +
-                 scale_fill_gradient2_tableau() +
-                 labs(title = "Duval County") +
-                 theme(legend.position = "bottom")
-
+                 scale_fill_viridis_c(option = "magma",
+                                      labels = function(x) paste0(x * 100, "%")) +
+                 labs(title = "Duval County",
+                      fill = "Non-White Share") +
+                 theme(legend.position = "bottom",
+                       plot.title = element_text(size = 14),
+                       legend.title = element_text(size = 12),
+                       legend.text = element_text(size = 11))
 
 # Can you adjust/beautify these plots? Spend 5-10 minutes exploring different
 # possibilities. 
@@ -374,15 +394,18 @@ duval_county %>% ggplot() +
 
 set_cancensus_api_key('YOUR KEY', install = TRUE)
 
-
-mtl <- list_census_regions(dataset = "CA21") %>% filter(name == "Montréal") %>% 
-       slice(1) %>% pull(1)
-
 # Interactively find variable(s) of interest:
 
 explore_census_vectors(dataset = "CA21")
 
-# Want to explore total non-white share in MTL:
+# Want to explore total non-white share in MTL ...
+
+# Extracting MTL's census code:
+
+mtl <- list_census_regions(dataset = "CA21") %>% filter(name == "Montréal") %>% 
+  slice(1) %>% pull(1)
+
+# Returning data for visible minority share ...
 
 mtl_data <- get_census(dataset = "CA21",
                        regions = list(CMA = mtl),
@@ -391,6 +414,8 @@ mtl_data <- get_census(dataset = "CA21",
                        geo_format = "sf",
                        labels = "short")
 
+# Generating measure of VM share:
+
 mtl_data <- mtl_data %>% mutate(vm_share = v_CA21_4875/Population)
 
 mtl_data %>% ggplot() +
@@ -398,17 +423,40 @@ mtl_data %>% ggplot() +
                      colour = "white",
                      linewidth = 0.01) +
              theme_map(base_family = "Inconsolata") + 
-             scale_fill_viridis_c(option = "inferno") +
+             scale_fill_viridis_c(option = "inferno",
+                                  labels = function(x) paste0(x * 100, "%"),
+                                  guide = guide_colourbar(title.position = "bottom")) +
              labs(title = "Grand Montréal",
                   subtitle = "Data from the 2021 Canadian Census",
                   fill = "Visible Minority Share") +
-             theme(legend.position = "top")
-
-# Feel free to adjust the plot to your liking --- and find other indicators to
-# visualize using cancensus OR tidycensus.
-
+             theme(legend.position = "top",
+                   plot.title = element_text(face = "bold"))
 
 # INTERACTIVE MAPS -------------------------------------------------------------
+
+# leaflet ----------------------------------------------------------------------
+
+# Where workshop participants were born  ---------------------------------------
+
+born_data
+
+continent_palette <- colorFactor(palette = c("dodgerblue", "red", 
+                                             "orange", "black", "purple"),
+                                 domain = born_data$continent)
+
+
+leaflet(born_data) %>%
+  # addProviderTiles(providers$CartoDB.DarkMatter) %>% 
+  addProviderTiles(providers$CartoDB.Voyager) %>% 
+  addCircleMarkers(lng = born_data$long, 
+                   lat = born_data$lat,
+                   fillOpacity = 0.5,
+                   weight = 10,
+                   radius = ~ sqrt(n) * 8,
+                   color = ~continent_palette(continent),
+                   stroke = FALSE) %>% 
+  # setView(lng= 90.4152, lat=23.8041, zoom = 4)
+
 
 # mapview ----------------------------------------------------------------------
 
@@ -427,36 +475,13 @@ fsu_sf <- st_as_sf(fsu, coords = c("long", "lat"),
 mapView(fsu_sf, color = "white", 
         col.regions = "#782F40",
         layer.name = "Florida State University",
+        # Size of point:
+        cex = 25,
         popup = popupIframe("https://www.youtube.com/embed/dB2VUuTm7MU?si=yZ2Y654rs-aDMZn4",
                            width = 300, height = 300))
 
 # popupIframe function comes from
 # https://rdrr.io/github/r-spatial/leafpop/src/R/graph.R
-
-# Leaflet ----------------------------------------------------------------------
-
-# Where workshop participants were born  ---------------------------------------
-
-born_data
-
-continent_palette <- colorFactor(palette = c("dodgerblue", "red", 
-                                             "orange", "black", "purple"),
-                                 domain = born_data$continent)
-
-
-leaflet(born_data) %>%
-              # addProviderTiles(providers$CartoDB.DarkMatter) %>% 
-addProviderTiles(providers$CartoDB.Voyager) %>% 
-addCircleMarkers(lng = born_data$long, 
-                 lat = born_data$lat,
-                 fillOpacity = 0.5,
-                 weight = 10,
-                 radius = ~ sqrt(n) * 8,
-                 color = ~continent_palette(continent),
-                 stroke = FALSE)  
-  # setView(lng= fsu$long, lat = fsu$lat, zoom = 4) 
-  
-                   
 
 
 # MORE INTERACTIVITY -----------------------------------------------------------
@@ -467,13 +492,14 @@ addCircleMarkers(lng = born_data$long,
 old_age_dependency  <- ggplot(data = select_countries,
                               aes(x = year, y = age_dependency, 
                                  colour = country)) +
-                       geom_line(mapping =) +
+                       geom_line() +
                        scale_colour_colorblind() +
                        theme_bw(base_family = "Inconsolata") +
                        labs(colour = "", x = "", y = "Old Age Dependency")
            
 
 select_countries_modified <- select_countries %>% 
+                             # Creating a text "tooltip" for our "hover label"
                              mutate(tooltip = paste(" Country:", 
                                                     country, "<br>", 
                                                     "Year:", year, "<br>",
@@ -490,20 +516,20 @@ old_age_dependency_new  <- ggplot(data = select_countries_modified,
                            theme_bw(base_family = "Inconsolata") +
                            labs(colour = "", x = "", y = "Old Age Dependency") 
 
-ggplotly(old_age_dependency_new,
-         tooltip = "text")
-
-
 # Adjusting the "hover label" and legend:
 
 ggplotly(old_age_dependency_new,
          tooltip = "text") %>% 
-# Changes font of tooltip:
+  
+# Adjusting the "hover label" and legend:
+        # Changes font of tooltip:
 layout(hoverlabel = list(font = list(family = "Inconsolata")),
+       # Changes legend location
        legend = list(x = 0,
-                      y = 1,
+                     y = 1,
                      traceorder = "normal"))
 
+# htmltools::save_html(STORED_OBJECT_HERE, "interactive_plot.html")
 
 # Use the select_countries data frame + plotly to easily produce some 
 # interactive plots of your own (in the next 10-15 mintutes or so).
@@ -512,9 +538,22 @@ layout(hoverlabel = list(font = list(family = "Inconsolata")),
 # gganimate --------------------------------------------------------------------
 
 
+old_age_dependency_alternative  <- ggplot(data = select_countries,
+                                          aes(x = year, y = age_dependency, 
+                                              colour = country)) +
+                                   geom_point() +
+                                   geom_line() +
+                                   scale_colour_colorblind() +
+                                   theme_bw(base_family = "Inconsolata") +
+                                   labs(colour = "", x = "", y = "Old Age Dependency")
 
 
+old_age_dependency_alternative + transition_reveal(year)
 
-
-
+# gif_dependency <- old_age_dependency_alternative + transition_reveal(year)
+# 
+# animate(gif_dependency, height = 8, width = 9, units = "in", fps = 10,
+#         res = 300)
+# 
+# anim_save("gif_dependency.gif")
 
