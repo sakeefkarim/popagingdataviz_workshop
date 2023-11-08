@@ -444,7 +444,6 @@ continent_palette <- colorFactor(palette = c("dodgerblue", "red",
                                              "orange", "black", "purple"),
                                  domain = born_data$continent)
 
-
 leaflet(born_data) %>%
   # addProviderTiles(providers$CartoDB.DarkMatter) %>% 
   addProviderTiles(providers$CartoDB.Voyager) %>% 
