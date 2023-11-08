@@ -1650,6 +1650,13 @@
       ],
       "Hash": "617fb2c300f68e8b1ba21043fba88fd7"
     },
+    "gifski": {
+      "Package": "gifski",
+      "Version": "1.12.0-2",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Hash": "94ea43ec9e47684c20810e9272605425"
+    },
     "glue": {
       "Package": "glue",
       "Version": "1.6.2",
