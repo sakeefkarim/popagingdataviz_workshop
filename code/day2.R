@@ -453,7 +453,7 @@ leaflet(born_data) %>%
                    weight = 10,
                    radius = ~ sqrt(n) * 8,
                    color = ~continent_palette(continent),
-                   stroke = FALSE) %>% 
+                   stroke = FALSE)
   # setView(lng= 90.4152, lat=23.8041, zoom = 4)
 
 
