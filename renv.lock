@@ -1529,26 +1529,6 @@
       ],
       "Hash": "d988f7c103c4354489f42e42e4889f9c"
     },
-    "ggiraph": {
-      "Package": "ggiraph",
-      "Version": "0.8.7",
-      "Source": "Repository",
-      "Repository": "RSPM",
-      "Requirements": [
-        "Rcpp",
-        "ggplot2",
-        "grid",
-        "htmltools",
-        "htmlwidgets",
-        "purrr",
-        "rlang",
-        "stats",
-        "systemfonts",
-        "uuid",
-        "vctrs"
-      ],
-      "Hash": "cc4b14781abf296aab585c5c056d9685"
-    },
     "gglgbtq": {
       "Package": "gglgbtq",
       "Version": "0.1.1",
@@ -3877,6 +3857,21 @@
         "xfun"
       ],
       "Hash": "8f96d229b7311beb32b94cf413b13f84"
+    },
+    "transformr": {
+      "Package": "transformr",
+      "Version": "0.1.4",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "cpp11",
+        "lpSolve",
+        "rlang",
+        "sf",
+        "tweenr",
+        "vctrs"
+      ],
+      "Hash": "d2ddc0cd58a322008c7c60ee495a7e18"
     },
     "triebeard": {
       "Package": "triebeard",
