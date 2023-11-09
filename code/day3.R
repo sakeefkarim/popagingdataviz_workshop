@@ -23,6 +23,7 @@ library(effects)
 # Misc:
 
 library(gtsummary)
+library(gt)
 library(ggthemes)
 library(gssr)
 library(panelr)
@@ -37,7 +38,7 @@ load("./data/day3.RData")
 
 # Basic Linear Model -----------------------------------------------------------
 
-mod_gapminder_1 <- lm(lifeExp ~ log_pop + continent + log_gdpPercap,
+mod_gapminder_1 <- lm(lifeExp ~ log_pop + log_gdpPercap + continent,
                       data = gapminder_2007)
 
 # Quick Tables
@@ -89,7 +90,8 @@ mod_wages_1 <- lm_robust(lwage ~ years_worked + years_education + female +
                          manufacturing + wave,
                          data = wage_panelr,
                          clusters = id,
-                         # Produces robust clustered SEs (via the Delta method, as in Stata):
+                         # Produces robust clustered SEs (via the Delta method, 
+                         # as in Stata):
                          se_type = "stata") 
   
 # Labels for coefficients:
@@ -201,7 +203,8 @@ ggeffect(mod_gapminder_2,
 
 # The longer route:
 
-mod_gapminder_2 %>% ggeffect(terms = c("log_gdpPercap [6:11]", "continent [Europe, Africa]")) %>% 
+mod_gapminder_2 %>% ggeffect(terms = c("log_gdpPercap [6:11]",
+                                       "continent [Europe, Africa]")) %>% 
                     as_tibble() %>% 
                     ggplot(mapping = aes(x = x, 
                                          y = predicted, 
