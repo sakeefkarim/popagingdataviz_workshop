@@ -53,6 +53,7 @@ mod_gapminder_1 %>% tidy()
 # Quick, Manual Coefficient Plot -----------------------------------------------
 
 mod_gapminder_1 %>% tidy(conf.int = TRUE) %>% 
+                    # Zeroing in on variables of interest:
                     filter(str_detect(term, "log")) %>% 
                     ggplot() +
                     geom_pointrange(mapping = aes(x = estimate,
@@ -71,9 +72,11 @@ modelplot(mod_gapminder_1)
 modelplot(mod_gapminder_1,
           # Omitting specific variables (e.g., controls, fixed effects etc.)
           coef_omit = "Interc|contin",
+          # 99% confidence intervals:
           conf_level = 0.99) +
 geom_vline(xintercept = 0,
            linetype = "dotted") +
+    # Shading in "pointranges" based on significance level:
 aes(color = ifelse(p.value < 0.01, "Significant", "Not significant")) +
 scale_colour_manual(values = c("grey", "red"))
 
@@ -86,9 +89,10 @@ mod_wages_1 <- lm_robust(lwage ~ years_worked + years_education + female +
                          manufacturing + wave,
                          data = wage_panelr,
                          clusters = id,
-                         # Produces robust clustered SEs (via the Delta method)
+                         # Produces robust clustered SEs (via the Delta method, as in Stata):
                          se_type = "stata") 
   
+# Labels for coefficients:
 
 wages_labels <- c("manufacturing1" = "Manufacturing",
                   "union1" = 'Union Member', 
@@ -101,12 +105,13 @@ wages_labels <- c("manufacturing1" = "Manufacturing",
     
 
 mod_wages_1 %>% modelplot(conf_level = 0.99,
-                         coef_omit = 'Interc|wave',
-                         colour = "red",
+                          #String search:
+                          coef_omit = 'Interc|wave',
+                          colour = "red",
                          # Renaming coefficients:
-                         coef_map = wages_labels) +
+                          coef_map = wages_labels) +
               theme_bw(base_family = "Inconsolata") +
-              # Adding reference point for "null" finding:
+              # Adding reference point for "non-significant" finding:
               geom_vline(xintercept = 0, 
                          linetype = "dashed") +
               labs(x = "Coefficient Estimates",
@@ -141,21 +146,23 @@ wage_models %>% modelplot(coef_omit = 'Interc|wave',
                           size = 1,
                           linewidth = 1,
                           coef_map = wages_labels) +
+                # Adjusting colour scale:
                 scale_colour_brewer(palette = "Set2") +
                 # From ggthemes
                 theme_wsj(base_family = "Inconsolata") +
                 theme(legend.title = element_blank()) +
-                 geom_vline(xintercept = 0,
-                            linetype = "dashed")
+                geom_vline(xintercept = 0,
+                           linetype = "dashed")
   
 # Using facets
 
 rev(wage_models) %>% modelplot(coef_omit = 'Interc|wave',
-                          size = 1,
-                          linewidth = 1,
-                          coef_map = wages_labels,
-                          colour = "skyblue",
-                          facet = TRUE) +
+                               # Matches arguments for geom_pointrange()
+                               size = 1,
+                               linewidth = 1,
+                               coef_map = wages_labels,
+                               colour = "skyblue",
+                               facet = TRUE) +
   theme_wsj(base_family = "Inconsolata") +
   theme(legend.title = element_blank(),
         strip.text.y = element_text(angle = 0)) +
@@ -175,6 +182,8 @@ mod_gapminder_2 <- lm(lifeExp ~ log_pop + continent*log_gdpPercap,
 # Using the ggeffect function:
 
 ggeffect(mod_gapminder_2, 
+         # Predicted life expectancy at logged GDP per capita of 6 to 11
+         # for countries in Europe and Africa:
          terms = c("log_gdpPercap [6:11]", "continent [Europe, Africa]")) %>% 
          plot() +
          labs(title = "Predicted Values of Life Expectancy", 
@@ -186,6 +195,7 @@ ggeffect(mod_gapminder_2,
           scale_color_economist() +
           scale_fill_economist() +
           theme(legend.position = "bottom") +
+          # Overriding default alpha of confidence intervals:
           guides(fill = guide_legend(override.aes =
                                        list(alpha = 0.35)))
 
@@ -201,6 +211,7 @@ mod_gapminder_2 %>% ggeffect(terms = c("log_gdpPercap [6:11]", "continent [Europ
                                          colour = group,
                                          fill = group)) +
                     geom_line() +
+                    # For confidence intervals:
                     geom_ribbon(alpha = 0.5) 
 
 # Can you adjust this plot so that it (more or less) matches the previous one?
@@ -230,12 +241,14 @@ avg_predictions(mod_gapminder_2,
   geom_ribbon(alpha = 0.5)  
 
 
-# AVERAGE MARGINAL EFFECTS ------------------------------------------------
+# AVERAGE MARGINAL EFFECTS -----------------------------------------------------
 
 mod_wages_2 %>% tbl_regression()
 
 avg_slopes(mod_wages_2,
+           # Focal variable:
            variables = "years_education",
+           # Across levels of ...
            by = "female")
 
 plot_slopes(mod_wages_2,
