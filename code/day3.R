@@ -266,9 +266,6 @@ theme_ggeffects(base_family = "IBM Plex Sans")
 
 
   
-
-
-
 # EXPLORE GSS_2010 -------------------------------------------------------------
 
 gss_2010
