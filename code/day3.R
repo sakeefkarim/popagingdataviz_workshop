@@ -25,6 +25,7 @@ library(effects)
 library(gtsummary)
 library(gt)
 library(ggthemes)
+library(hrbrthemes)
 library(gssr)
 library(panelr)
 library(skimr)
@@ -85,7 +86,7 @@ scale_colour_manual(values = c("grey", "red"))
     
 wage_panelr %>% skim()
 
-mod_wages_1 <- lm_robust(lwage ~ years_worked + years_education + female +
+mod_wages_1 <- lm_robust(lwage ~ years_worked + female +
                          black + blue_collar +south + union + 
                          manufacturing + wave,
                          data = wage_panelr,
@@ -102,7 +103,6 @@ wages_labels <- c("manufacturing1" = "Manufacturing",
                   "black1" = "Black",
                   "female1" = "Female",
                   "years_worked" = "Years in Workforce",
-                  "years_education" = "Education (Years)",
                   "blue_collar1" = "Blue Collar Worker")
     
 
@@ -119,14 +119,19 @@ mod_wages_1 %>% modelplot(conf_level = 0.99,
               labs(x = "Coefficient Estimates",
                    title = "Predicting the Log of Wages",
                    subtitle = "With 99% Confidence Intervals") 
-              
-# Including interactions:
 
-mod_wages_2 <- lm_robust(lwage ~ years_worked + years_education*female + black +
+
+# Additional control:
+
+mod_wages_2 <- lm_robust(lwage ~ years_worked + years_education + female + black +
                          blue_collar + south + union + manufacturing + wave,
                          data = wage_panelr,
                          clusters = id,
                          se_type = "stata") 
+
+# Adjusting our labels:
+
+wages_labels <- c(wages_labels, "years_education" = "Education (Years)")
 
 mod_wages_2 %>% modelplot(conf_level = 0.99,
                           coef_omit = 'Interc|wave',
@@ -142,9 +147,9 @@ mod_wages_2 %>% modelplot(conf_level = 0.99,
 # Comparing models
 
 wage_models <- list("Base Model" = mod_wages_1,
-                    "Interaction Model" = mod_wages_2)
+                    "Full Model" = mod_wages_2)
 
-wage_models %>% modelplot(coef_omit = 'Interc|wave',
+wage_models %>% modelplot(coef_omit = 'Interc|wave|edu',
                           size = 1,
                           linewidth = 1,
                           coef_map = wages_labels) +
@@ -158,7 +163,7 @@ wage_models %>% modelplot(coef_omit = 'Interc|wave',
   
 # Using facets
 
-rev(wage_models) %>% modelplot(coef_omit = 'Interc|wave',
+rev(wage_models) %>% modelplot(coef_omit = 'Interc|wave|edu',
                                # Matches arguments for geom_pointrange()
                                size = 1,
                                linewidth = 1,
@@ -234,29 +239,35 @@ plot_predictions(mod_gapminder_2,
 avg_predictions(mod_gapminder_2,
                 variables = list(log_gdpPercap = c(6:11),
                                  continent = c("Africa", "Europe"))) %>% 
-  ggplot(mapping = aes(x = log_gdpPercap, 
-                       y = estimate, 
-                       ymin = conf.low,
-                       ymax = conf.high,
-                       colour = continent,
-                       fill = continent)) +
-  geom_line() +
-  geom_ribbon(alpha = 0.5)  
+ggplot(mapping = aes(x = log_gdpPercap, 
+                     y = estimate, 
+                     ymin = conf.low,
+                     ymax = conf.high,
+                     colour = continent,
+                     fill = continent)) +
+geom_line() +
+geom_ribbon(alpha = 0.5)  
 
 
 # AVERAGE MARGINAL EFFECTS -----------------------------------------------------
 
 mod_wages_2 %>% tbl_regression()
 
-avg_slopes(mod_wages_2,
+avg_slopes(mod_gapminder_2,
            # Focal variable:
-           variables = "years_education",
+           variables = "log_gdpPercap",
            # Across levels of ...
-           by = "female")
+           by = "continent")
 
-plot_slopes(mod_wages_2,
-            variables = "years_education",
-            condition = "female")
+plot_slopes(mod_gapminder_2,
+            variables = "log_gdpPercap",
+            condition = "continent") + 
+theme_ggeffects(base_family = "IBM Plex Sans")
+
+
+  
+
+
 
 # EXPLORE GSS_2010 -------------------------------------------------------------
 
