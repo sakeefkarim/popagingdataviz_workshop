@@ -80,6 +80,9 @@ ggplot(data = penguins, mapping = aes(x = bill_depth_mm)) +
 
 ?aes
 
+skim(gapminder)
+
+
 # First example: gapminder
 
 # No mapping aesthetics:
@@ -122,7 +125,7 @@ ggplot(# Note that we're subsetting the data within the ggplot function:
   geom_point(# Adjusts the colour of the points:
     colour = "#008080",
     # Adjusts the size of the points:
-    size = 3,
+    size = 1,
     # Adjusts the transparency of the points:
     alpha = 0.5)
 
@@ -188,6 +191,8 @@ ggplot(data = gapminder %>% filter(year == max(year)),
 # specifically, data from `select_countries`.
 
 # Here's an overview of the data frame:
+
+select_countries
 
 skim(select_countries)
 
@@ -277,6 +282,8 @@ geom_line()
 
 # Here's a look at the data frame in question.
 
+select_countries_sex
+
 skim(select_countries_sex)
 
 # For now, let's begin by producing a bar plot that highlights sex differences 
@@ -290,7 +297,7 @@ ggplot(data = select_countries_sex %>% filter(year == max(year)),
                      group = sex)) +
   geom_col(# To ensure that bars are placed
     # side-by-side --- and not stacked!
-    position = "identity", 
+    position = "stack", 
     colour = "white") 
 
 ?position_
@@ -348,6 +355,23 @@ geom_boxplot(linewidth = 0.3,
              # has not been subsetted.
              data = select_countries_sex)
 
+ggplot(data = select_countries_sex %>% 
+         filter(year == max(year)) %>% 
+         # Rearranging the order of the discrete 
+         # y-axis labels using forcats functions:
+         mutate(country = 
+                  fct_rev(fct_relevel(country, 
+                                      "Canada",
+                                      "United States",
+                                      "Germany"))),
+       mapping = aes(# Note the inversion of the x and y axes:
+         x = country,
+         y = life_expectancy,
+         fill = sex)) +
+  geom_col(position = "dodge", 
+           colour = "white") 
+
+
 # What do you notice about the arguments within the `geom_boxplot()` function?
 
 # STATISTICAL TRANSFORMATIONS --------------------------------------------------
@@ -358,7 +382,7 @@ geom_boxplot(linewidth = 0.3,
 # relationships between variables in our data. 
 
 # For our purposes, we'll focus on a couple of statistical transformations and a
-# ssociated functions. To this end, we'll work with some new `geom`s that are 
+# associated functions. To this end, we'll work with some new `geom`s that are 
 # powered by `stat_*` functions under the hood.
 
 # Smoothed Conditional Means ---------------------------------------------------
@@ -383,7 +407,9 @@ ggplot(data = select_countries,
                      colour = country)) +
 geom_smooth(mapping = # Adjusts hue of the confidence intervals:
                      aes(fill = country),
-            alpha = 0.5)
+            alpha = 0.3)
+
+?geom_smooth
 
 # We can adjust how we're "smoothing" our data by toggling the `method` 
 # argument within `geom_smooth()`. 
@@ -404,14 +430,15 @@ geom_smooth(aes(fill = country),
 ggplot(data = gapminder %>% 
               # Zeroing in on latest year and removing Oceania
               # which has only two observations:
-              filter(year == max(year),
-                     !continent == "Oceania"),
+              filter(year == max(year)),
        mapping = aes(x = lifeExp,
                      # Ensuring the "fill" (colour inside the distribution) 
                      # and "colour" (the line) have the same attributes:
                      colour = continent)) +
 geom_freqpoly(mapping = aes(y = after_stat(density)),
               binwidth = 5)
+
+?stat_density
 
 # 
 # gapminder %>% 
@@ -440,7 +467,7 @@ ggplot(data = gapminder %>%
          # which has only two observations:
          filter(year == max(year)), 
        aes(x = continent, y = lifeExp)) +
-  geom_point(colour = "lightgrey") +
+  geom_point(colour = "lightgrey") + 
   stat_summary(fun.data = "mean_cl_boot", 
                colour = "skyblue", 
                linewidth = 2,
@@ -456,7 +483,7 @@ ggplot(data = select_countries,
                      colour = country)) +
 geom_smooth(mapping = # Adjusts hue of the confidence intervals:
                      aes(fill = country),
-            alpha = 0.5)  +
+            alpha = 0.5) +
 scale_x_continuous(# Prunes the x-axis by setting new limits:
                    # 2000-2020 instead of 1970-2020
                    limits = c(2000, 2020),
@@ -469,9 +496,10 @@ scale_x_continuous(# Prunes the x-axis by setting new limits:
 ggplot(data = select_countries,
        mapping = aes(x = year, 
                      y = fertility_rate, 
+                     linetype = fertility_rate,
                      colour = country)) +
 geom_smooth(mapping = 
-            aes(fill = country),
+            aes(fill = country,
             alpha = 0.5)  +
 scale_x_continuous(limits = c(2000, 2020),
                    breaks = seq(2000, 2020, by = 5)) +
@@ -504,7 +532,11 @@ scale_linetype_manual(name = "",
 scale_colour_brewer(palette = "Dark2") +
 scale_fill_brewer(palette = "Dark2")
 
+
+
 # Working with "dates" ---------------------------------------------------------
+
+mobility_covdata
 
 # Data can be piped in as a part of a longer code sequence:
 mobility_covdata %>% 
@@ -533,6 +565,9 @@ scale_x_date(# Breaks between dates:
              date_breaks = "2 months",
              # Date format --- run ?strptime for more information:
              date_labels = "%D")
+
+?strptime
+
 
 # COORDS -----------------------------------------------------------------------
 
@@ -606,7 +641,7 @@ ggplot(data = select_countries_sex,
                      fill = sex, 
                      colour = sex))  +
   geom_polygon(alpha = 0.5) +
-  facet_wrap(~country) +
+  facet_wrap(~country, nrow = 1) +
   scale_x_continuous(limits = c(1970, 2020),
                      labels = c("2020", "1980", "1990",
                                 "2000", "2010", "1970")) +
@@ -630,7 +665,7 @@ select_countries %>%
   facet_grid(indicator ~ country, 
              # Ensures that both panels can have their own
              # x/y limits:
-             scales = "free") +
+             scale = "free") +
   scale_colour_brewer(palette = "Dark2") +
   scale_fill_brewer(palette = "Dark2")
 
@@ -638,7 +673,7 @@ select_countries %>%
 # ADJUSTING LABELS -------------------------------------------------------------
 
 ggplot(gapminder %>% filter(year == max(year) |
-                              year == min(year)),
+                            year == min(year)),
        aes(x = log(gdpPercap), y = lifeExp))  +
   facet_wrap(~year, nrow = 2) +
   geom_point(aes(colour = continent, size = pop), alpha = 0.65)  +
@@ -655,8 +690,9 @@ ggplot(gapminder %>% filter(year == max(year) |
     size = "Population") +
   # Using functions within scales function to clean up labels ---
   # in this case, simply adding a "+" sign
-  scale_size_continuous(labels = scales::comma_format(suffix = " +")) 
-
+  scale_size_continuous(labels = 
+                          scales::comma_format(suffix = " +")) 
+?comma_format
 
 # ADJUSTING THEMES -------------------------------------------------------------
 
@@ -741,7 +777,8 @@ ggplot(gapminder %>% filter(year == max(year) |
     colour = guide_legend(order = 1,
                           # Overriding aes - all keys are 
                           # at size = 5.
-                          override.aes = list(size = 5))) 
+                          override.aes = list(size = 8))) 
+
 
 # ADDITIONAL GEOMS -------------------------------------------------------------
 
@@ -754,7 +791,7 @@ ggplot(gapminder %>%
            fill = continent,
            colour = continent)) +
   geom_density_ridges(alpha = 0.35,
-                      jittered_points = TRUE)  +
+                      jittered_points = TRUE) +
   scale_colour_brewer(palette = "Dark2") +
   scale_fill_brewer(palette = "Dark2") +
   theme_ridges() +
@@ -766,7 +803,7 @@ ggplot(gapminder %>%
   # Removes all padding around x-axis:
   scale_x_continuous(expand = c(0, 0)) +
   # Allows plotting outside of the plot margin/panel:
-  coord_cartesian(clip = "off") 
+  coord_cartesian() 
 
 # geom_repel() -----------------------------------------------------------------
 
@@ -888,7 +925,7 @@ ggplot(gapminder %>%
 
 # Reproducing Kieran Healy's mortality heat map (https://kieranhealy.org/prints/mortality-v/)
 
-fr.mort %>% as_tibble() %>% 
+fr.mort %>% 
   filter(!Group == "total", !Age > 100) %>% 
   ggplot(., aes(x = Year, y = Age, fill = ntile(Mortality, 100))) +
   facet_wrap(~paste0(str_to_title(Group),"s"), nrow = 2) +
@@ -900,7 +937,9 @@ fr.mort %>% as_tibble() %>%
   labs(title = "Mortality in France",
        subtitle = "1816-2006",
        x = "", fill = "Death Rate (Percentile)") +
-  guides(fill = guide_legend(nrow = 1, title.position = "top", label.position = "bottom")) +
+  guides(fill = guide_legend(nrow = 1, 
+                             title.position = "top", 
+                             label.position = "bottom")) +
   theme(plot.title = element_text(size = 25),
         plot.subtitle = element_text(size = 15),
         axis.title.y = element_text(size = 13, 
@@ -910,6 +949,8 @@ fr.mort %>% as_tibble() %>%
         panel.grid.minor = element_blank(),
         legend.key = element_rect(colour = "white", linewidth = 1.1),
         legend.justification = "top")
+
+aus.fert
 
 
 # Lexis Diagrams ---------------------------------------------------------------
@@ -952,10 +993,10 @@ can_binned_age %>%
                 colour = sex,
                 fill = sex)) +
   geom_col(alpha = 0.7, 
-           colour = "white") + 
+           colour = "white") +
   theme_modern(base_family = "Inconsolata") + 
   labs(fill = "",  colour = "",
-       x = "Share of Canadian Population",
+       x = "Share of Canadian Population in 2021",
        y = "Age Group") +
   scale_fill_manual(values = c("#C47376", "#73c4c1")) +
   scale_colour_manual(values = c("#C47376", "#73c4c1")) +

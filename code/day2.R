@@ -35,9 +35,7 @@ library(leafpop)
 
 library(plotly)
 library(gganimate)
-library(transformr)
-library(htmltools)
-library(gifski)
+library(ggiraph)
 
 # Misc
 
@@ -396,7 +394,7 @@ set_cancensus_api_key('YOUR KEY', install = TRUE)
 
 # Interactively find variable(s) of interest:
 
-explore_census_vectors(dataset = "CA21")
+explore_census_vectors(dataset = "CA16")
 
 # Want to explore total non-white share in MTL ...
 
@@ -423,14 +421,14 @@ mtl_data %>% ggplot() +
                      colour = "white",
                      linewidth = 0.01) +
              theme_map(base_family = "Inconsolata") + 
-             scale_fill_viridis_c(option = "inferno",
-                                  labels = function(x) paste0(x * 100, "%"),
-                                  guide = guide_colourbar(title.position = "bottom")) +
+             scale_fill_viridis_c(option = "inferno") +
              labs(title = "Grand Montréal",
                   subtitle = "Data from the 2021 Canadian Census",
                   fill = "Visible Minority Share") +
-             theme(legend.position = "top",
-                   plot.title = element_text(face = "bold"))
+             theme(legend.position = "top")
+
+# Feel free to adjust the plot to your liking --- and find other indicators to
+# visualize using cancensus OR tidycensus.
 
 # INTERACTIVE MAPS -------------------------------------------------------------
 
@@ -444,6 +442,7 @@ continent_palette <- colorFactor(palette = c("dodgerblue", "red",
                                              "orange", "black", "purple"),
                                  domain = born_data$continent)
 
+
 leaflet(born_data) %>%
   # addProviderTiles(providers$CartoDB.DarkMatter) %>% 
   addProviderTiles(providers$CartoDB.Voyager) %>% 
@@ -453,7 +452,7 @@ leaflet(born_data) %>%
                    weight = 10,
                    radius = ~ sqrt(n) * 8,
                    color = ~continent_palette(continent),
-                   stroke = FALSE)
+                   stroke = FALSE) %>% 
   # setView(lng= 90.4152, lat=23.8041, zoom = 4)
 
 
@@ -477,7 +476,7 @@ mapView(fsu_sf, color = "white",
         # Size of point:
         cex = 25,
         popup = popupIframe("https://www.youtube.com/embed/dB2VUuTm7MU?si=yZ2Y654rs-aDMZn4",
-                           width = 500, height = 300))
+                           width = 300, height = 300))
 
 # popupIframe function comes from
 # https://rdrr.io/github/r-spatial/leafpop/src/R/graph.R
@@ -502,7 +501,7 @@ select_countries_modified <- select_countries %>%
                              mutate(tooltip = paste(" Country:", 
                                                     country, "<br>", 
                                                     "Year:", year, "<br>",
-                                                    "Old Age Dependency:",
+                                                    "Old Age Depndency:",
                                                      round(age_dependency, 2)))
 
 old_age_dependency_new  <- ggplot(data = select_countries_modified,
@@ -534,25 +533,17 @@ layout(hoverlabel = list(font = list(family = "Inconsolata")),
 # interactive plots of your own (in the next 10-15 mintutes or so).
 
 
-# gganimate --------------------------------------------------------------------
+
+old_age_dependency  <- ggplot(data = select_countries,
+                              aes(x = year, y = age_dependency, 
+                                  colour = country)) +
+  geom_line() +
+  scale_colour_colorblind() +
+  theme_bw(base_family = "Inconsolata") +
+  labs(colour = "", x = "", y = "Old Age Dependency")
+
+old_age_dependency + transition_time(year)
 
 
-old_age_dependency_alternative  <- ggplot(data = select_countries,
-                                          aes(x = year, y = age_dependency, 
-                                              colour = country)) +
-                                   geom_point() +
-                                   geom_line() +
-                                   scale_colour_colorblind() +
-                                   theme_bw(base_family = "Inconsolata") +
-                                   labs(colour = "", x = "", y = "Old Age Dependency")
 
-
-old_age_dependency_alternative + transition_reveal(year)
-
-# gif_dependency <- old_age_dependency_alternative + transition_reveal(year)
-# 
-# animate(gif_dependency, height = 8, width = 9, units = "in", fps = 10,
-#         res = 300)
-# 
-# anim_save("gif_dependency.gif")
 

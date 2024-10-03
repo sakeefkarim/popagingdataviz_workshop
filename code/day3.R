@@ -42,6 +42,7 @@ load("./data/day3.RData")
 mod_gapminder_1 <- lm(lifeExp ~ log_pop + log_gdpPercap + continent,
                       data = gapminder_2007)
 
+
 # Quick Tables
 
 tbl_regression(mod_gapminder_1)
@@ -61,7 +62,9 @@ mod_gapminder_1 %>% tidy(conf.int = TRUE) %>%
                     geom_pointrange(mapping = aes(x = estimate,
                                                   y = term,
                                                   xmin = conf.low,
-                                                  xmax = conf.high))
+                                                  xmax = conf.high)) +
+  geom_vline(xintercept = 0,
+             linetype = "dotted")
                     
 # Spend 10 minutes beautifying this basic visualization
 
@@ -87,7 +90,7 @@ scale_colour_manual(values = c("grey", "red"))
 wage_panelr %>% skim()
 
 mod_wages_1 <- lm_robust(lwage ~ years_worked + female +
-                         black + blue_collar +south + union + 
+                         black + blue_collar + south + union + 
                          manufacturing + wave,
                          data = wage_panelr,
                          clusters = id,
