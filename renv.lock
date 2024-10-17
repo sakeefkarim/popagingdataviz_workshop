@@ -4084,15 +4084,17 @@
     },
     "terra": {
       "Package": "terra",
-      "Version": "1.7-78",
+      "Version": "1.8-0",
       "Source": "Repository",
-      "Repository": "CRAN",
+      "Repository": "https://rspatial.r-universe.dev",
+      "RemoteUrl": "https://github.com/rspatial/terra",
+      "RemoteSha": "1c1c4cfc71b246cdd499d1a6aec965096d6b4f86",
       "Requirements": [
         "R",
         "Rcpp",
         "methods"
       ],
-      "Hash": "8f020def0792119cb98bd8f696dab22d"
+      "Hash": "9fd1253596bfad66fc081dcd51ccfbb6"
     },
     "textshaping": {
       "Package": "textshaping",
