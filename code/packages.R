@@ -29,6 +29,7 @@ library(colorspace)
 
 library(lemon)
 library(skimr)
+library(summarytools)
 library(lattice)
 library(ggrepel)
 library(ggridges)
