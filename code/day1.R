@@ -870,6 +870,33 @@ select_countries %>%
         axis.text.x = element_text(size = 12),
         axis.text.y = element_text(size = 10))
 
+# Networks
+
+ggraph(toy_network, 
+       # Kamada-Kawai algorithm:
+       layout = "kk") + 
+  # Adding layer of edges
+  geom_edge_diagonal(mapping = aes(edge_alpha = 0.8), 
+                     show.legend = FALSE, color = "lightgrey") + 
+  # Adding nodes
+  geom_node_point(size = 6,
+                  shape = 21,
+                  colour = "white",
+                  fill = "darkred") +  
+  # Adding labels
+  geom_node_label(aes(label = name),
+                  family = "IBM Plex Sans",
+                  nudge_y = -0.1,
+                  fill = "darkred",
+                  colour = "white",
+                  size = 4) +
+  # Removing grid lines, axis labels, tickets and so on:
+  theme_void() +
+  # Creating black background:
+  theme(panel.background = element_rect(fill = "black"))
+
+
+
 
 # MORE THEMES, SCHEMES ---------------------------------------------------------
 
