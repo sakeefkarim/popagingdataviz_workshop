@@ -496,58 +496,63 @@ ggplot(data = select_countries,
        mapping = aes(x = year, 
                      y = fertility_rate, 
                      colour = country)) +
-geom_smooth(mapping = # Adjusts hue of the confidence intervals:
-                     aes(fill = country),
-            alpha = 0.5) +
-scale_x_continuous(# Prunes the x-axis by setting new limits:
-                   # 2000-2020 instead of 1970-2020
-                   limits = c(2000, 2020),
-                   # How is this range sliced up? 
-                   # Here, 2000 to 2020 in increments of 5 (years):
-                   breaks = seq(2000, 2020, by = 5)) 
+  geom_smooth(mapping = # Adjusts hue of the confidence intervals:
+                aes(fill = country),
+              alpha = 0.5) +
+  scale_x_continuous(# Prunes the x-axis by setting new limits:
+                     # 2000-2020 instead of 1970-2020
+                     limits = c(2000, 2020),
+                     # How is this range sliced up? 
+                     # Here, 2000 to 2020 in increments of 5 (years):
+                     breaks = seq(2000, 2020, by = 5)) 
 
 # Modifying linetype aesthetics ------------------------------------------------
 
 ggplot(data = select_countries,
-       mapping = aes(x = year, 
-                     y = fertility_rate, 
-                     linetype = fertility_rate,
+       mapping = aes(x = year, y = fertility_rate, 
                      colour = country)) +
-geom_smooth(mapping = 
-            aes(fill = country),
-            alpha = 0.5)  +
-scale_x_continuous(limits = c(2000, 2020),
-                   breaks = seq(2000, 2020, by = 5)) +
-geom_hline(mapping = aes(yintercept = 2.1, 
-                         linetype = "Replacement Level Fertility")) +
-scale_linetype_manual(# Removing the legend title for linetypes:
-                      name = "",
-                      # To control legends, breaks need to be linked
-                      # to values:
-                      breaks = "Replacement Level Fertility",
-                      values = "dashed")
-
+  geom_smooth(mapping = aes(fill = country),
+              alpha = 0.5)  +
+  scale_x_continuous(limits = c(2000, 2020),
+                     breaks = seq(2000, 2020, by = 5)) +
+  geom_hline(mapping = aes(yintercept = 2.1, 
+                           linetype = "Replacement Level Fertility"),
+             # Modifying colour of line:
+             colour = "grey") +
+  # Adding vertical line as well
+  geom_vline(mapping = aes(xintercept = 2007.5,
+                           linetype = "Global Recession"),
+             colour = "black") +
+  scale_linetype_manual(name = "",
+                        # Linking lines to distinct linetypes
+                        values = c("Replacement Level Fertility" = "dashed", 
+                                   "Global Recession" = "dotted"))
 
 # Modifying colour/fill of geometric layers ------------------------------------
 
 ggplot(data = select_countries,
        mapping = aes(x = year, y = fertility_rate, 
                      colour = country)) +
-geom_smooth(mapping = aes(fill = country),
-            alpha = 0.5)  +
-scale_x_continuous(limits = c(2000, 2020),
-                   breaks = seq(2000, 2020, by = 5)) +
-geom_hline(mapping = aes(yintercept = 2.1, 
-                         linetype = "Replacement Level Fertility")) +
-scale_linetype_manual(name = "",
-                      breaks = "Replacement Level Fertility",
-                      values = "dashed") +
-# Using the "Dark 2" palette from the inbuilt
-# colour_brewer() family of functions:
-scale_colour_brewer(palette = "Dark2") +
-scale_fill_brewer(palette = "Dark2")
-
-
+  geom_smooth(mapping = aes(fill = country),
+              alpha = 0.5)  +
+  scale_x_continuous(limits = c(2000, 2020),
+                     breaks = seq(2000, 2020, by = 5)) +
+  geom_hline(mapping = aes(yintercept = 2.1, 
+                           linetype = "Replacement Level Fertility"),
+             # Modifying colour of line:
+             colour = "grey") +
+  # Adding vertical line as well
+  geom_vline(mapping = aes(xintercept = 2007.5,
+                           linetype = "Global Recession"),
+             colour = "black") +
+  scale_linetype_manual(name = "",
+                        # Linking lines to distinct linetypes
+                        values = c("Replacement Level Fertility" = "dashed", 
+                                   "Global Recession" = "dotted")) +
+  # Using the "Dark 2" palette from the inbuilt
+  # colour_brewer() family of functions:
+  scale_colour_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2")
 
 # Working with "dates" ---------------------------------------------------------
 
