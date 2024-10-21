@@ -15,6 +15,7 @@ library(covdata)
 library(cansim)
 library(WDI)
 library(LexisPlotR)
+library(tinyplot)
 
 # Themes, Colour Schemes
 
