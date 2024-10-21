@@ -4415,6 +4415,22 @@
       ],
       "Hash": "c5f3c201b931cd6474d17d8700ccb1c8"
     },
+    "tinyplot": {
+      "Package": "tinyplot",
+      "Version": "0.2.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "grDevices",
+        "graphics",
+        "methods",
+        "stats",
+        "tools",
+        "utils"
+      ],
+      "Hash": "0f0ae1a12df2ab4a329176c359182310"
+    },
     "tinytable": {
       "Package": "tinytable",
       "Version": "0.5.0",
