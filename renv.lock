@@ -679,6 +679,18 @@
       ],
       "Hash": "f61dbaec772ccd2e17705c1e872e9e7c"
     },
+    "cgwtools": {
+      "Package": "cgwtools",
+      "Version": "4.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "gmp",
+        "methods"
+      ],
+      "Hash": "aac770e9a02a37ff608686d9ba94188c"
+    },
     "checkmate": {
       "Package": "checkmate",
       "Version": "2.3.2",
@@ -1986,6 +1998,17 @@
         "methods"
       ],
       "Hash": "5899f1eaa825580172bb56c08266f37c"
+    },
+    "gmp": {
+      "Package": "gmp",
+      "Version": "0.7-5",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "methods"
+      ],
+      "Hash": "47b774de7ee40f6134cfdeab3fc85df9"
     },
     "googledrive": {
       "Package": "googledrive",
