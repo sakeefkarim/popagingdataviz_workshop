@@ -39,6 +39,7 @@ library(ggiraph)
 
 # Misc
 
+library(colorspace)
 library(patchwork)
 library(see)
 library(scales)
